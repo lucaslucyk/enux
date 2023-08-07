@@ -1,14 +1,21 @@
-import './styles/App.css'
-import { Provider } from 'react-redux'
-import store from './store'
+import './styles/App.css';
+import { Provider } from 'react-redux';
+import store from './store';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+
+import Home from './containers/Home';
+import Error404 from './containers/errors/Error404';
 
 function App() {
 
   return (
     <Provider store={store}>
-      <div className="text-blue-600">
-        <h1 className="text-3xl font-bold">Vite + React</h1>
-      </div>
+      <Router>
+        <Routes>
+          <Route path='*' element={<Error404/>}></Route>
+          <Route exact path='/' element={<Home/>}></Route>
+        </Routes>
+      </Router>
     </Provider>
   )
 }
