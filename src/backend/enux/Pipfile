@@ -11,6 +11,7 @@ django-cors-headers = "*"
 whitenoise = "*"
 pyjwt = "*"
 djangorestframework = "*"
+djoser = "*"
 
 [dev-packages]
 
