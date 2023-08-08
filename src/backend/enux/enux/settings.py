@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 from .utils import is_env_true
 
@@ -41,7 +42,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'social_django.middleware.SocialAuthExceptionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -155,3 +159,60 @@ STATIC_ROOT = BASE_DIR / "staticfiles-cdn"
 MEDIA_ROOT = BASE_DIR / "mediafiles-cdn"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': os.environ.get(
+        'DRF_DEFAULT_SCHEMA_CLASS',
+        'rest_framework.schemas.coreapi.AutoSchema'
+    ),
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': tuple(os.environ.get(
+        'DRF_DEFAULT_AUTHENTICATION_CLASSES',
+        '{} {}'.format(
+            "rest_framework_simplejwt.authentication.JWTAuthentication",
+            "rest_framework.authentication.SessionAuthentication"
+        )
+    ).split(' ')),
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': os.environ.get(
+        'DRF_DEFAULT_PERMISSION_CLASSES',
+        # 'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated',
+    ).split(' '),
+    'DEFAULT_PAGINATION_CLASS': os.environ.get(
+        'DRF_DEFAULT_PAGINATION_CLASS',
+        'rest_framework.pagination.PageNumberPagination',
+    ),
+    'PAGE_SIZE': int(os.environ.get('DRF_PAGE_SIZE', 10))
+}
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.facebook.FacebookOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}
