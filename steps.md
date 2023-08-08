@@ -30,15 +30,18 @@
   py -m venv .venv
   pipenv install
   pipenv install "django<5.0.0,>4.2.0"
+  pipenv install django-environ
   ```
 - cd to backend folder and create django project
   ```bash
   django-admin startproject enux .
+  # or
+  django-admin startproject enux
   ```
 
 - create apps folders and create apps
   ```bash
-  py manage.py startapp auth apps/auth
+  py manage.py startapp users apps/users
   py manage.py startapp products apps/products
   py manage.py startapp coupons apps/coupons
   py manage.py startapp reviews apps/reviews
