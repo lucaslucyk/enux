@@ -20,6 +20,7 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+import Alert from '../Alert'
 
 const solutions = [
   {
@@ -85,6 +86,7 @@ function classNames(...classes) {
 
 export default function Example() {
   return (
+    <>
     <Popover className="relative bg-white">
       <div className="absolute inset-0 shadow z-30 pointer-events-none" aria-hidden="true" />
       <div className="relative z-20">
@@ -406,5 +408,7 @@ export default function Example() {
         </Popover.Panel>
       </Transition>
     </Popover>
+    <Alert/>
+    </>
   )
 }
