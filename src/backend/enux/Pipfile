@@ -12,6 +12,7 @@ whitenoise = "*"
 pyjwt = "*"
 djangorestframework = "*"
 djoser = "*"
+argon2-cffi = "*"
 
 [dev-packages]
 
