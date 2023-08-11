@@ -1,10 +1,19 @@
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { check_authenticated, load_user, refresh } from '../redux/actions/auth';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../components/navigation/Footer';
 
 const Layout = (props) => {
+
+    useEffect(() => {
+        props.refresh()
+        props.check_authenticated()
+        props.load_user()
+    }, []);
+
     return (
         <div>
             <Navbar/>
@@ -15,4 +24,9 @@ const Layout = (props) => {
     )
 };
 
-export default Layout;
+const LayoutConnect = connect(null, {
+    check_authenticated,
+    load_user,
+    refresh
+}) (Layout);
+export default LayoutConnect;
