@@ -43,6 +43,7 @@ export default function Auth(state = initialState, action) {
                 loading: false
             }
         case USER_LOADED_SUCCESS:
+            // localStorage.setItem('user', JSON.stringify(payload));
             return {
                 ...state,
                 user: payload
@@ -60,6 +61,7 @@ export default function Auth(state = initialState, action) {
         case AUTHENTICATED_FAIL:
             localStorage.removeItem('access');
             localStorage.removeItem('refresh');
+            // localStorage.removeItem('isAuthenticated');
             return {
                 ...state,
                 isAuthenticated: false,
@@ -69,6 +71,7 @@ export default function Auth(state = initialState, action) {
         case LOGIN_SUCCESS:
             localStorage.setItem('access', payload.access);
             localStorage.setItem('refresh', payload.refresh);
+            // localStorage.setItem('isAuthenticated', '1');
             return {
                 ...state,
                 isAuthenticated: true,
@@ -90,13 +93,23 @@ export default function Auth(state = initialState, action) {
             localStorage.setItem('access', payload.access);
             return {
                 ...state,
-                access: localStorage.getItem('access')
+                access: localStorage.getItem('access'),
+                isAuthenticated: true
             }
 
         case SIGNUP_SUCCESS:
         case SIGNUP_FAIL:
         case LOGIN_FAIL:
         case REFRESH_FAIL:
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
+            // localStorage.removeItem('isAuthenticated');
+            return {
+                ...state,
+                isAuthenticated: false,
+                access: null,
+                refresh: null
+            }
         case LOGOUT:
             localStorage.removeItem('access')
             localStorage.removeItem('refresh')

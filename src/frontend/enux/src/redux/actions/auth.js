@@ -44,14 +44,20 @@ export const check_authenticated = () => async dispatch => {
                     type: AUTHENTICATED_SUCCESS
                 });
             } else {
+                dispatch(refresh());
+                // dispatch({
+                //     type: AUTHENTICATED_FAIL
+                // });
+            }
+        } catch(err){
+            if (err.response && err.response.status >= 400 && err.response.status < 500){
+                dispatch(refresh());
+            }
+            else{
                 dispatch({
                     type: AUTHENTICATED_FAIL
                 });
             }
-        } catch(err){
-            dispatch({
-                type: AUTHENTICATED_FAIL
-            });
         }
     } else {
         dispatch({
@@ -167,7 +173,7 @@ export const login = ({email, password}) => async dispatch => {
                 type: LOGIN_SUCCESS,
                 payload: res.data
             });
-            dispatch(load_user());
+            // dispatch(load_user());
             dispatch({
                 type: REMOVE_AUTH_LOADING
             });
@@ -259,6 +265,7 @@ export const refresh = () => async dispatch => {
                     type: REFRESH_SUCCESS,
                     payload: res.data
                 });
+                dispatch(load_user());
             } else {
                 dispatch({
                     type: REFRESH_FAIL

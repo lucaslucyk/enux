@@ -84,7 +84,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Navbar() {
   return (
     <>
     <Popover className="relative bg-white">
@@ -185,7 +185,7 @@ export default function Example() {
                 )}
               </Popover>
               <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
-                Pricing
+                Store
               </a>
               <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
                 Docs
