@@ -6,18 +6,18 @@ import { check_authenticated, load_user } from '../redux/actions/auth';
 import Navbar from '../components/navigation/Navbar';
 import Footer from '../components/navigation/Footer';
 
-const Layout = (props) => {
+const Layout = ({ check_authenticated, load_user, children }) => {
 
     useEffect(() => {
-        props.check_authenticated()
-        props.load_user()
-    }, []);
+        check_authenticated()
+        load_user()
+    }, [check_authenticated, load_user]);
 
     return (
         <div>
             <Navbar/>
             <ToastContainer autoClose={5000} />
-            {props.children}
+            {children}
             <Footer />
         </div>
     )
