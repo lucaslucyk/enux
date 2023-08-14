@@ -21,6 +21,7 @@ import {
 } from './types'
 import { setAlert } from './alert'
 import axios from 'axios'
+import { createToken } from '../../services/auth'
 
 
 export const check_authenticated = () => async dispatch => {
@@ -94,12 +95,12 @@ export const signup = ({first_name, last_name, email, password, re_password}) =>
                 type: SIGNUP_SUCCESS,
                 payload: res.data
             });
-            dispatch(setAlert('Te enviamos un correo, por favor activa tu cuenta. Revisa el correo de spam','green'))
+            dispatch(setAlert('Te enviamos un correo, por favor activa tu cuenta. Revisa el correo de spam','success'))
         } else {
             dispatch({
                 type: SIGNUP_FAIL
             });
-            dispatch(setAlert('Error al crear cuenta', 'red'));
+            dispatch(setAlert('Error al crear cuenta', 'error'));
         }
         dispatch({
             type: REMOVE_AUTH_LOADING
@@ -111,7 +112,7 @@ export const signup = ({first_name, last_name, email, password, re_password}) =>
         dispatch({
             type: REMOVE_AUTH_LOADING
         });
-        dispatch(setAlert('Error conectando con el servidor, intenta mas tarde.', 'red'));
+        dispatch(setAlert('Error conectando con el servidor, intenta mas tarde.', 'error'));
     }
 };
 
@@ -154,49 +155,25 @@ export const login = ({email, password}) => async dispatch => {
     dispatch({
         type: SET_AUTH_LOADING
     });
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    const body = JSON.stringify({
-        email,
-        password
-    });
 
     try {
-        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/jwt/create/`, body, config);
-    
-        if (res.status === 200) {
-            dispatch({
-                type: LOGIN_SUCCESS,
-                payload: res.data
-            });
-            // dispatch(load_user());
-            dispatch({
-                type: REMOVE_AUTH_LOADING
-            });
-            dispatch(setAlert('Successful login', 'green'));
-        } else {
-            dispatch({
-                type: LOGIN_FAIL
-            });
-            dispatch({
-                type: REMOVE_AUTH_LOADING
-            });
-            dispatch(setAlert('Login error', 'red'));
-        }
+        const token = await createToken({email, password})
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: token
+        });
+        dispatch(setAlert('Successful login', 'success'));
     }
     catch(err){
         dispatch({
             type: LOGIN_FAIL
         });
-        dispatch({
-            type: REMOVE_AUTH_LOADING
-        });
-        dispatch(setAlert('Login error. Try again later.', 'red'));
+        dispatch(setAlert(err.message || "Login error.", 'error'));
     }
+    
+    dispatch({
+        type: REMOVE_AUTH_LOADING
+    });
 }
 
 export const activate = ({uid, token}) => async dispatch => {
@@ -222,12 +199,12 @@ export const activate = ({uid, token}) => async dispatch => {
             dispatch({
                 type: ACTIVATION_SUCCESS
             });
-            dispatch(setAlert('Account activated successfully', 'green'));
+            dispatch(setAlert('Account activated successfully', 'success'));
         } else {
             dispatch({
                 type: ACTIVATION_FAIL
             });
-            dispatch(setAlert('Error activating account', 'red'));
+            dispatch(setAlert('Error activating account', 'error'));
         }
         dispatch({
             type: REMOVE_AUTH_LOADING
@@ -240,7 +217,7 @@ export const activate = ({uid, token}) => async dispatch => {
         dispatch({
             type: REMOVE_AUTH_LOADING
         });
-        dispatch(setAlert('Error connecting to the server, please try again later.', 'red'));
+        dispatch(setAlert('Error connecting to the server, please try again later.', 'error'));
     }
 };
 
@@ -287,5 +264,5 @@ export const logout = () => dispatch => {
     dispatch({
         type: LOGOUT
     });
-    dispatch(setAlert('Succesfully logged out', 'green'));
+    dispatch(setAlert('Succesfully logged out', 'success'));
 }

@@ -1,20 +1,36 @@
 import {Fragment} from 'react'
 import {connect} from 'react-redux'
 
-import { CheckCircleIcon } from '@heroicons/react/solid'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 
 const Alert = ({ alert }) => {
 
     const displayAlert = () => {
         if (alert !== null){
+            let bgColor;
+            let icon;
+            switch (alert.alertType) {
+                case 'error':
+                    bgColor = 'bg-red-600'
+                    icon = <XCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
+                    break;
+                case 'success':
+                        bgColor = 'bg-green-600'
+                        icon = <CheckCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
+                        break;
+                default:
+                    bgColor = 'bg-white'
+                    break;
+            }
+
             return (
-                <div className={`rounded-md bg-${alert.alertType}-600 p-4`}>
+                <div className={`rounded-md ${bgColor} py-3 px-4`}>
                     <div className="flex">
                         <div className="flex-shrink-0">
-                        <CheckCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
+                        {icon}
                         </div>
                         <div className="ml-3">
-                        <p className={`text-sm font-medium text-white`}>{alert.msg}</p>
+                        <p className={`text-sm font-medium text-white`}>{alert.msg || 'Something was wrong.'}</p>
                         </div>
                     </div>
                 </div>
