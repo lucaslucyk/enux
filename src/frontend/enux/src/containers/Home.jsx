@@ -3,7 +3,7 @@ import Layout from "../hocs/Layout";
 const Home = () => {
     return(
         <Layout>
-            Home
+            <div className='bg-white'>Home</div>
         </Layout>
     )
 };

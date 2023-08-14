@@ -20,7 +20,7 @@ function App() {
           <Route exact path='/' element={<Home/>}></Route>
 
           {/** auth */}
-          <Route exact path='/register' element={<Signup/>}></Route>
+          <Route exact path='/signup' element={<Signup/>}></Route>
           <Route exact path='/login' element={<Login/>}></Route>
           <Route exact path='/activate/:uid/:token' element={<Activate/>}></Route>
 

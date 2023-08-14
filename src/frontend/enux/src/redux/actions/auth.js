@@ -17,7 +17,7 @@ import {
     // RESET_PASSWORD_FAIL,
     // RESET_PASSWORD_CONFIRM_SUCCESS,
     // RESET_PASSWORD_CONFIRM_FAIL,
-    // LOGOUT
+    LOGOUT
 } from './types'
 import { setAlert } from './alert'
 import axios from 'axios'
@@ -281,4 +281,11 @@ export const refresh = () => async dispatch => {
             type: REFRESH_FAIL
         });
     }
+}
+
+export const logout = () => dispatch => {
+    dispatch({
+        type: LOGOUT
+    });
+    dispatch(setAlert('Succesfully logged out', 'green'));
 }

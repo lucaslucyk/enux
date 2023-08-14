@@ -103,16 +103,16 @@ const Login = ({login, loading, isAuthenticated}) => {
 
               <div>
                 {loading ? 
-                    <button className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button disabled className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <Oval
-                            height={80}
-                            width={80}
-                            color="#4fa94d"
+                            height={20}
+                            width={20}
+                            color="white"
                             wrapperStyle={{}}
                             wrapperClass=""
                             visible={true}
                             ariaLabel='oval-loading'
-                            secondaryColor="#4fa94d"
+                            secondaryColor="white"
                             strokeWidth={2}
                             strokeWidthSecondary={2}
                         />
