@@ -1,7 +1,12 @@
 import {Fragment} from 'react'
 import {connect} from 'react-redux'
 
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/solid'
+import {
+    CheckCircleIcon,
+    XCircleIcon,
+    ExclamationCircleIcon,
+    InformationCircleIcon
+} from '@heroicons/react/solid'
 
 const Alert = ({ alert }) => {
 
@@ -14,12 +19,21 @@ const Alert = ({ alert }) => {
                     bgColor = 'bg-red-600'
                     icon = <XCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
                     break;
+                case 'warning':
+                    bgColor = 'bg-amber-600'
+                    icon = <ExclamationCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
+                    break;
+                case 'info':
+                    bgColor = 'bg-sky-600'
+                    icon = <InformationCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
+                    break;
                 case 'success':
                         bgColor = 'bg-green-600'
                         icon = <CheckCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
                         break;
                 default:
-                    bgColor = 'bg-white'
+                    bgColor = 'bg-sky-600'
+                    icon = <InformationCircleIcon className={`h-5 w-5 text-white`} aria-hidden="true" />
                     break;
             }
 
