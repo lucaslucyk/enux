@@ -8,6 +8,13 @@ class LoginError extends Error {
     }
 }
 
+class SignupError extends Error {
+    constructor(mensaje) {
+        super(mensaje);
+        this.name = "SignupError";
+    }
+}
+
 class TokenError extends Error {
     constructor(mensaje) {
         super(mensaje);
@@ -64,6 +71,35 @@ export const tokenVerify = async (token) => {
         }
         else {
             throw new TokenError("Something was wrong.")
+        }
+    }
+}
+
+export const userCreate = async (data) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/auth/users/`,
+            data,
+            config
+        );
+        if (res.status === 201) {
+            return res.data
+        } else {
+            throw new SignupError(res.data.detail)
+        }
+    } catch (error){
+        if (error instanceof SignupError) { throw error }
+        if (error.response && error.response.status >= 400 && error.response.status < 500){
+            throw new SignupError(JSON.stringify(error.response.data))
+        }
+        else {
+            throw new SignupError("Signup error. Try again later.")
         }
     }
 }

@@ -21,7 +21,7 @@ import {
 } from './types'
 import { setAlert } from './alert'
 import axios from 'axios'
-import { tokenCreate, tokenVerify } from '../../services/auth'
+import { tokenCreate, tokenVerify, userCreate } from '../../services/auth'
 
 
 export const checkAuthenticated = () => async dispatch => {
@@ -51,47 +51,24 @@ export const signup = ({first_name, last_name, email, password, re_password}) =>
         type: SET_AUTH_LOADING
     });
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    };
-
-    const body = JSON.stringify({
-        first_name,
-        last_name,
-        email,
-        password,
-        re_password
-    });
-
     try {
-        const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/users/`, body, config);
-
-        if (res.status === 201) {
-            dispatch({
-                type: SIGNUP_SUCCESS,
-                payload: res.data
-            });
-            dispatch(setAlert('Te enviamos un correo, por favor activa tu cuenta. Revisa el correo de spam','success'))
-        } else {
-            dispatch({
-                type: SIGNUP_FAIL
-            });
-            dispatch(setAlert('Error al crear cuenta', 'error'));
-        }
+        const user = await userCreate({first_name, last_name, email, password, re_password})
         dispatch({
-            type: REMOVE_AUTH_LOADING
+            type: SIGNUP_SUCCESS,
+            payload: user
         });
-    } catch (err) {
+        dispatch(setAlert('Registration successful. Please check your email.','success'))
+    }
+    catch(err){
         dispatch({
             type: SIGNUP_FAIL
         });
-        dispatch({
-            type: REMOVE_AUTH_LOADING
-        });
-        dispatch(setAlert('Error conectando con el servidor, intenta mas tarde.', 'error'));
+        dispatch(setAlert(err.message || "Signup error.", 'error'));
     }
+
+    dispatch({
+        type: REMOVE_AUTH_LOADING
+    });
 };
 
 export const load_user = () => async dispatch => {
