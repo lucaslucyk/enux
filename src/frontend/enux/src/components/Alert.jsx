@@ -8,6 +8,7 @@ import {
     InformationCircleIcon
 } from '@heroicons/react/solid'
 
+
 const Alert = ({ alert }) => {
 
     const displayAlert = () => {
@@ -38,13 +39,16 @@ const Alert = ({ alert }) => {
             }
 
             return (
-                <div className={`rounded-md ${bgColor} py-3 px-4`}>
-                    <div className="flex">
-                        <div className="flex-shrink-0">
-                        {icon}
-                        </div>
-                        <div className="ml-3">
-                        <p className={`text-sm font-medium text-white`}>{alert.msg || 'Something was wrong.'}</p>
+                <div id="toast-bottom-right" className="fixed flex justify-end w-full min-w-sm max-w-sm p-3 right-5 bottom-5" role="alert">
+                
+                    <div className={`rounded-md ${bgColor} p-4`}>
+                        <div className="flex">
+                            <div className="flex-shrink-0 self-center">
+                            {icon}
+                            </div>
+                            <div className="ml-3">
+                            <p className={`text-sm font-medium text-white`}>{alert.msg || 'Something was wrong.'}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

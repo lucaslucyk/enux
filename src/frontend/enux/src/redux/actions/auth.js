@@ -21,44 +21,22 @@ import {
 } from './types'
 import { setAlert } from './alert'
 import axios from 'axios'
-import { createToken } from '../../services/auth'
+import { tokenCreate, tokenVerify } from '../../services/auth'
 
 
-export const check_authenticated = () => async dispatch => {
-    if(localStorage.getItem('access')){
-        const config = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        };
-
-        const body = JSON.stringify({
-            token: localStorage.getItem('access')
-        });
-
+export const checkAuthenticated = () => async dispatch => {
+    const token = localStorage.getItem('access');
+    if(token){
         try {
-            const res = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/auth/jwt/verify/`, body, config);
-
-            if (res.status === 200) {
-                dispatch({
-                    type: AUTHENTICATED_SUCCESS
-                });
+            if (await tokenVerify(token)) {
+                dispatch({type: AUTHENTICATED_SUCCESS});
             } else {
                 dispatch(refresh());
-                // dispatch({
-                //     type: AUTHENTICATED_FAIL
-                // });
             }
-        } catch(err){
-            if (err.response && err.response.status >= 400 && err.response.status < 500){
-                dispatch(refresh());
-            }
-            else{
-                dispatch({
-                    type: AUTHENTICATED_FAIL
-                });
-            }
+        } catch {
+            dispatch({
+                type: AUTHENTICATED_FAIL
+            });
         }
     } else {
         dispatch({
@@ -157,7 +135,7 @@ export const login = ({email, password}) => async dispatch => {
     });
 
     try {
-        const token = await createToken({email, password})
+        const token = await tokenCreate({email, password})
         dispatch({
             type: LOGIN_SUCCESS,
             payload: token

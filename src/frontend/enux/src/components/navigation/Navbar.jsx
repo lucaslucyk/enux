@@ -23,7 +23,6 @@ import {
 import { ChevronDownIcon } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import { logout } from '../../redux/actions/auth'
-import Alert from '../Alert'
 
 const solutions = [
   {
@@ -93,7 +92,6 @@ function Navbar({isAuthenticated, user, logout}) {
 
   const logoutHandler = () => {
     logout()
-    // console.log("TODO: logout")
   }
 
   const authLinks = (
@@ -488,7 +486,7 @@ function Navbar({isAuthenticated, user, logout}) {
         </Popover.Panel>
       </Transition>
     </Popover>
-    <Alert/>
+    {/* <Alert/> */}
     </>
   )
 }

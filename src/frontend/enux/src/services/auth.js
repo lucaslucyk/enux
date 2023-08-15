@@ -8,7 +8,14 @@ class LoginError extends Error {
     }
 }
 
-export const createToken = async (data) => {
+class TokenError extends Error {
+    constructor(mensaje) {
+        super(mensaje);
+        this.name = "TokenError";
+    }
+}
+
+export const tokenCreate = async (data) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -24,7 +31,6 @@ export const createToken = async (data) => {
         if (res.status === 200) {
             return res.data
         } else {
-            console.error(res)
             throw new LoginError(res.data.detail)
         }
     } catch (error) {
@@ -34,6 +40,30 @@ export const createToken = async (data) => {
         }
         else {
             throw new LoginError("Login error. Try again later.")
+        }
+    }
+}
+
+export const tokenVerify = async (token) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/auth/jwt/verify/`,
+            {token},
+            config
+        );
+        return res.status === 200
+    } catch (err){
+        if (err.response && err.response.status >= 400 && err.response.status < 500){
+            return false;
+        }
+        else {
+            throw new TokenError("Something was wrong.")
         }
     }
 }
